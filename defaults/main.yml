@@ -1,2 +1,29 @@
 ---
-# defaults file for .
+yourls:
+  # A specific version could be selected,
+  # if not, it will get latest Yourls version.
+  version: latest
+  path: /var/html/yourls
+  api: http://api.yourls.org/core/version/1.0
+  scm: https://github.com/YOURLS/YOURLS
+  owner: root
+  group: root
+  db:
+    name: yourls
+    user: your db password
+    pass: your db user name
+    host: localhost
+    prefix: yourls_
+  users:
+    user01: your user password
+  conf:
+    site: http://your-own-domain-here.com
+    lang: ''
+    hours_offset: 0
+    unique_urls: True
+    private: True
+    cookiekey: 'Mr9m|Hm8Tv#2z%gU|UTDFjk}MMs2|IDTaK3QwM$r'
+    debug: False
+    url_convert: 36
+    reserved_urls: []
+  plugins: {}
