@@ -1,2 +1,64 @@
 ---
-# tasks file for .
+- name: Create Yourls directory.
+  file:
+    path: "{{ yourls.path }}"
+    state: directory
+    mode: 0755
+    owner: "{{ yourls.owner }}"
+    group: "{{ yourls.group }}"
+
+- name: Get latest Yourls version.
+  uri:
+    url: "{{ yourls.api }}"
+    return_content: yes
+    body_format: json
+  register: api_response
+  when:
+      yourls.version == 'latest'
+
+- name: Set download version.
+  set_fact:
+    yourls_version: |
+      {% if yourls.version == 'latest' %}
+        {{ (api_response.content | safe | from_json).latest }}
+      {% else %}
+        {{ yourls.version }}
+      {% endif %}
+
+- name: Check current Yourls version.
+  lineinfile:
+    dest: "{{ yourls.path }}/includes/version.php"
+    regexp: "(.+?)'YOURLS_VERSION', '(\\d*\\.?){3}'(.+)"
+    line: "\\g<1>'YOURLS_VERSION', '{{ yourls_version | trim }}'\\g<3>"
+    backrefs: yes
+  #check_mode: True
+  ignore_errors: True
+  register: need_update
+
+- name: Set download URL.
+  set_fact:
+    yourls_url: "{{ '%s/archive/%s.tar.gz' % (yourls.scm, yourls_version | trim) }}"
+  when:
+    need_update.changed
+    or need_update | failed
+
+- name: Download Yourls.
+  unarchive:
+    src: "{{ yourls_url }}"
+    dest: "{{ yourls.path }}"
+    extra_opts:
+      - '--strip-components=1'
+    remote_src: yes
+    mode: 0755
+    owner: "{{ yourls.owner }}"
+    group: "{{ yourls.group }}"
+  when:
+    need_update.changed
+    or need_update | failed
+
+- name: Copy config file.
+  template:
+    src: config.php.j2
+    dest: "{{ yourls.path }}/user/config.php"
+    owner: "{{ yourls.owner }}"
+    group: "{{ yourls.group }}"
