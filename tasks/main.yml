@@ -31,7 +31,7 @@
     regexp: "(.+?)'YOURLS_VERSION', '(\\d*\\.?){3}'(.+)"
     line: "\\g<1>'YOURLS_VERSION', '{{ yourls_version | trim }}'\\g<3>"
     backrefs: yes
-  #check_mode: True
+  check_mode: True
   ignore_errors: True
   register: need_update
 
