@@ -1,7 +1,0 @@
----
-- name: Manage Yourls
-  hosts: all
-  become: True
-  gather_facts: False
-  roles:
-    - role: ../
