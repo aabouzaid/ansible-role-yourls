@@ -14,37 +14,31 @@
     body_format: json
   register: api_response
   when:
-      yourls.version == 'latest'
+    yourls.version == 'latest'
 
 - name: Set download version.
   set_fact:
-    yourls_version: |
-      {% if yourls.version == 'latest' %}
-        {{ (api_response.content | safe | from_json).latest }}
-      {% else %}
-        {{ yourls.version }}
-      {% endif %}
+    yourls: "{{ yourls | combine({'version': api_response.json.tag_name}, recursive=True) }}"
+  when:
+    yourls.version == 'latest'
+
+- name: Set download URL.
+  set_fact:
+    yourls: "{{ yourls | combine({'url': '%s/archive/%s.tar.gz' % (yourls.scm, yourls.version)}, recursive=True) }}"
 
 - name: Check current Yourls version.
   lineinfile:
     dest: "{{ yourls.path }}/includes/version.php"
     regexp: "(.+?)'YOURLS_VERSION', '(\\d*\\.?){3}'(.+)"
-    line: "\\g<1>'YOURLS_VERSION', '{{ yourls_version | trim }}'\\g<3>"
+    line: "\\g<1>'YOURLS_VERSION', '{{ yourls.version }}'\\g<3>"
     backrefs: yes
   check_mode: True
   ignore_errors: True
   register: need_update
 
-- name: Set download URL.
-  set_fact:
-    yourls_url: "{{ '%s/archive/%s.tar.gz' % (yourls.scm, yourls_version | trim) }}"
-  when:
-    need_update.changed
-    or need_update | failed
-
 - name: Download Yourls.
   unarchive:
-    src: "{{ yourls_url }}"
+    src: "{{ yourls.url }}"
     dest: "{{ yourls.path }}"
     extra_opts:
       - '--strip-components=1'
