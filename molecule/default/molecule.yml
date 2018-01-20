@@ -1,0 +1,44 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+lint:
+  name: yamllint
+  enabled: False
+
+platforms:
+  - name: centos-yourls-versioned
+    image: centos:7
+  - name: centos-yourls-latest
+    image: centos:7
+
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_HASH_BEHAVIOUR: merge
+  lint:
+    name: ansible-lint
+    options:
+      x: ANSIBLE0016
+  inventory:
+    host_vars:
+      centos-yourls-versioned:
+        yourls:
+          version: 1.7.1
+      centos-yourls-latest:
+        yourls:
+          version: latest
+  playbooks:
+    converge: ../../tests/test.yml
+
+scenario:
+  name: default
+  converge_sequence:
+    - destroy
+    - create
+    - converge
+    - lint
+    - destroy
