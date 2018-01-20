@@ -12,7 +12,7 @@ Role Variables
 --------------
 
 Since nested variables are used here, so to avoid defining the while vars,
-it's recommended to set `hash_behaviour = merge` or pass env var `ANSIBLE_HASH_BEHAVIOUR: merge`
+it's recommended to set `hash_behaviour = merge` or pass env var `ANSIBLE_HASH_BEHAVIOUR=merge`
 at Ansible execution.
 
 Example Playbook

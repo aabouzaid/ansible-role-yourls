@@ -22,6 +22,10 @@ provisioner:
     name: ansible-lint
     options:
       x: ANSIBLE0016
+
+  playbooks:
+    converge: ../../tests/test.yml
+
   inventory:
     host_vars:
       centos-yourls-versioned:
@@ -30,8 +34,6 @@ provisioner:
       centos-yourls-latest:
         yourls:
           version: latest
-  playbooks:
-    converge: ../../tests/test.yml
 
 scenario:
   name: default
