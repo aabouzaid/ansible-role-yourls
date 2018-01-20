@@ -1,6 +1,10 @@
 Yourls Ansible Role
 ===================
 
+[![Build Status][travis-badge]][travis-link]
+[![GPL v2 licensed][license-badge]][license-link]
+[![Galaxy Role][role-badge]][galaxy-link]
+
 Ansible role to install Yourls (Your Own URL Shortener, PHP web app).
 
 Requirements
@@ -48,3 +52,10 @@ Author Information
 ------------------
 
 [Ahmed AbouZaid](http://tech.aabouzaid.com/).
+
+[license-badge]: https://img.shields.io/badge/License-GPL%20v2-blue.svg
+[license-link]: https://www.gnu.org/licenses/gpl-2.0.txt
+[role-badge]: https://img.shields.io/ansible/role/23300.svg
+[galaxy-link]: https://galaxy.ansible.com/AAbouZaid/yourls/
+[travis-badge]: https://api.travis-ci.org/AAbouZaid/ansible-role-yourls.svg?branch=master
+[travis-link]: https://travis-ci.org/AAbouZaid/ansible-role-yourls
