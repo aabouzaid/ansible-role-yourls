@@ -1,12 +1,4 @@
 ---
-- name: Create Yourls directory.
-  file:
-    path: "{{ yourls.path }}"
-    state: directory
-    mode: 0755
-    owner: "{{ yourls.owner }}"
-    group: "{{ yourls.group }}"
-
 - name: Get latest Yourls version.
   uri:
     url: "{{ yourls.api }}"
@@ -25,6 +17,14 @@
 - name: Set download URL.
   set_fact:
     yourls: "{{ yourls | combine({'url': '%s/archive/%s.tar.gz' % (yourls.scm, yourls.version)}, recursive=True) }}"
+
+- name: Create Yourls directory.
+  file:
+    path: "{{ yourls.path }}"
+    state: directory
+    mode: 0755
+    owner: "{{ yourls.owner }}"
+    group: "{{ yourls.group }}"
 
 - name: Check current Yourls version.
   lineinfile:
