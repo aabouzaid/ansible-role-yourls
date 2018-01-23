@@ -5,7 +5,7 @@ Yourls Ansible Role
 [![GPL v2 licensed][license-badge]][license-link]
 [![Galaxy Role][role-badge]][galaxy-link]
 
-Ansible role to install Yourls (Your Own URL Shortener, PHP web app).
+Ansible role to install [Yourls](https://github.com/YOURLS/YOURLS/) (Your Own URL Shortener, PHP web app).
 
 Requirements
 ------------
